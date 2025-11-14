@@ -4,6 +4,7 @@
 
 This is a repository to create a shitty application.
 Shitty application should not be useful but fun.
+Shitty application is a web brower based app.
 
 ## Basic rules
 
