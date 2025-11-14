@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>かたかな秘文ターミナル</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="crt-overlay"></div>
+  <main class="console">
+    <header class="console__header">
+      <div>
+        <h1>かたかな秘文ターミナル</h1>
+        <p class="subtitle">極秘司令端末 - 機密度: たぶんMAX</p>
+      </div>
+      <div class="status-bar">
+        <span id="mission-label">作戦準備中...</span>
+        <span>冷静度: <strong id="cool-meter">100%</strong></span>
+        <span>ノイズ指数: <strong id="noise-meter">0%</strong></span>
+      </div>
+    </header>
+
+    <section class="boot-panel">
+      <div class="panel-title">起動ログ</div>
+      <div id="boot-log" class="log-window" aria-live="polite"></div>
+    </section>
+
+    <section class="mission-panel">
+      <div class="panel-title">任務プロファイル</div>
+      <div class="mission-text">
+        <p id="mission-story">システム起動中...</p>
+      </div>
+    </section>
+
+    <section class="decoder">
+      <div class="panel-title">ドット復号ユニット</div>
+      <div class="dot-grid" role="group" aria-label="復号ボタン">
+        <button class="dot-btn" aria-label="decode dot 1"></button>
+        <button class="dot-btn" aria-label="decode dot 2"></button>
+        <button class="dot-btn" aria-label="decode dot 3"></button>
+        <button class="dot-btn" aria-label="decode dot 4"></button>
+        <button class="dot-btn" aria-label="decode dot 5"></button>
+        <button class="dot-btn" aria-label="decode dot 6"></button>
+        <button class="dot-btn" aria-label="decode dot 7"></button>
+        <button class="dot-btn" aria-label="decode dot 8"></button>
+        <button class="dot-btn" aria-label="decode dot 9"></button>
+      </div>
+      <div class="decoder-output" id="decoder-output">▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒</div>
+    </section>
+
+    <section class="result-panel">
+      <div class="panel-title">解析結果</div>
+      <p id="result-text">ドットをカチカチすると機密が漏れます。</p>
+      <button id="next-mission" class="next-btn" disabled>次の任務へ</button>
+    </section>
+
+    <footer>
+      <p>操作方法: ドットをリズムよく連打し、出てくる指令を完遂せよ！。</p>
+      <p>※ 本端末の精度は気分により変化します。クレーム不可。</p>
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+
+</html>
