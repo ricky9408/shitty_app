@@ -10,16 +10,16 @@ Shitty application is a web brower based app.
 
 ### MUST
 
-- The UI of shitty app should be retro
+- The UI of shitty app
 - The language of UI must be Japanese
 - Fun
 - Web brower based app (Should not have serverside)
+- Must be unique
 
 ### BETTER TO DO
 
-- I prefer dot-based UI design, but not essential
 - Prefer to be a game
-- I prefer golang but choose proper langguage to meet MUST rules.
+- I prefer golang but choose proper language to meet MUST rules.
 
 ## IDEAS for project
 
