@@ -3,6 +3,7 @@
 ## Global instructions for codex
 
 ./.codex/AGENTS.md
+./.codex/CONTEXT.md
 
 ## Instructions for Gemini
 

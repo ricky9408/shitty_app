@@ -1,29 +1,4 @@
-# Repository Guidelines
-
-## Project Summary
-
-This is a repository to create a shitty application.
-Shitty application should not be useful but fun.
-Shitty application is a web brower based app.
-
-## Basic rules
-
-### MUST
-
-- The UI of shitty app is a dot based UI
-- The language of UI must be Japanese
-- Fun
-- Web brower based app (Should not have serverside)
-- Must be unique
-
-### BETTER TO DO
-
-- Prefer to be a game
-
-## IDEAS for project
-
-- Something like a minigame of "Made in Wario" game.
-- Start with serious mood but ends with funny mood.
+# CONTEXTS
 
 ## Concept of the shitty app
 
@@ -33,6 +8,12 @@ GAME CONCEPT: “Hope Simulator 24”
 
 A browser game that pretends to be a simple idle/clicker adventure.
 But underneath, it systematically destroys the player’s hope every time they start making progress.
+
+Should have a story explained at the beginning.
+
+The story is like you are trapped in the space pod because of the accident.
+You are waiting for the help.
+You are trying to send help signal to command center.
 
 Clean at the start.
 Unhinged by the end.

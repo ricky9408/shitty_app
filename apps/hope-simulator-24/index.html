@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>希望シミュレーター24</title>
+  <style>
+    :root {
+      --bg: #080c12;
+      --panel: #0f1824;
+      --accent: #74f2ff;
+      --danger: #ff5f78;
+      --warn: #f9e547;
+      --soft: #b9d7ff;
+      --text: #e7f3ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, #111b2a 0%, #090d14 45%, #05070c 100%);
+      color: var(--text);
+      font-family: "IBM Plex Mono", "MS Gothic", "Yu Gothic UI", monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      overflow: hidden;
+    }
+
+    .glow {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 20%, rgba(116, 242, 255, 0.06), transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(255, 95, 120, 0.05), transparent 55%);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .container {
+      width: min(1040px, 100%);
+      max-height: 92vh;
+      background: linear-gradient(135deg, rgba(15, 24, 36, 0.92), rgba(10, 14, 20, 0.92));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.45), 0 0 28px rgba(116, 242, 255, 0.08);
+      padding: 10px 12px 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scanlines::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(to bottom,
+          rgba(255, 255, 255, 0.05) 0,
+          rgba(255, 255, 255, 0.05) 1px,
+          transparent 2px,
+          transparent 4px);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      color: var(--soft);
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 10px;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px 12px;
+      position: relative;
+    }
+
+    .panel h2 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+    }
+
+    .hud {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .porthole {
+      position: relative;
+      height: 160px;
+      border-radius: 12px;
+      margin: 6px 0 2px;
+      border: 1px solid rgba(116, 242, 255, 0.25);
+      background: radial-gradient(circle at 30% 30%, rgba(116, 242, 255, 0.08), transparent 45%),
+        linear-gradient(135deg, rgba(10, 18, 28, 0.9), rgba(4, 8, 12, 0.95));
+      overflow: hidden;
+      box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.35);
+    }
+
+    .dash-grid {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 24px 24px, 24px 24px;
+      opacity: 0.45;
+      animation: drift 18s linear infinite;
+    }
+
+    .dash-cross {
+      position: absolute;
+      inset: 0;
+      margin: 8px;
+      border: 1px dashed rgba(116, 242, 255, 0.2);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .orbit {
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(116, 242, 255, 0.18);
+      border-radius: 50%;
+      filter: blur(0.3px);
+    }
+
+    .orbit-2 {
+      inset: 32px;
+      opacity: 0.6;
+      border-color: rgba(255, 95, 120, 0.2);
+    }
+
+    .pod-model {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transform-origin: center;
+      animation: pod-spin 18s linear infinite;
+    }
+
+    .pod-body {
+      position: absolute;
+      inset: 28px;
+      background: radial-gradient(circle at 40% 35%, rgba(255, 255, 255, 0.18), rgba(116, 242, 255, 0.06));
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.5), 0 0 12px rgba(116, 242, 255, 0.16);
+    }
+
+    .pod-window {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.7), rgba(116, 242, 255, 0.35));
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      top: 38px;
+      left: 52px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .pod-shadow {
+      position: absolute;
+      inset: 28px;
+      border-radius: 32px;
+      background: radial-gradient(circle at 70% 70%, rgba(0, 0, 0, 0.35), transparent 60%);
+      filter: blur(4px);
+    }
+
+    .pod-thruster {
+      position: absolute;
+      width: 14px;
+      height: 26px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(116, 242, 255, 0.1));
+      border-radius: 8px;
+      bottom: 24px;
+      box-shadow: 0 0 10px rgba(255, 95, 120, 0.25);
+    }
+
+    .thruster-left {
+      left: 40px;
+      transform: rotate(-16deg);
+    }
+
+    .thruster-right {
+      right: 40px;
+      transform: rotate(16deg);
+    }
+
+    .beam {
+      position: absolute;
+      width: 70px;
+      height: 180px;
+      top: -26px;
+      left: 50%;
+      transform: translateX(-50%) rotate(6deg);
+      background: linear-gradient(180deg, rgba(116, 242, 255, 0.22), transparent 70%);
+      opacity: 0.2;
+      filter: blur(1px);
+      transition: opacity 0.2s ease;
+    }
+
+    .flare {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      top: 32%;
+      left: 20%;
+      background: radial-gradient(circle, rgba(116, 242, 255, 0.18), transparent 60%);
+      mix-blend-mode: screen;
+      opacity: 0.35;
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(0.96);
+        opacity: 0.25;
+      }
+
+      50% {
+        transform: scale(1.04);
+        opacity: 0.4;
+      }
+    }
+
+    @keyframes pod-spin {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    .piece {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      box-shadow: 0 0 14px rgba(116, 242, 255, 0.12);
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .piece.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .piece-antenna {
+      width: 8px;
+      height: 36px;
+      right: 52px;
+      top: -6px;
+      background: linear-gradient(180deg, rgba(116, 242, 255, 0.7), rgba(116, 242, 255, 0.2));
+    }
+
+    .piece-amplifier {
+      width: 78px;
+      height: 10px;
+      bottom: -4px;
+      left: 30px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 95, 120, 0.35));
+    }
+
+    .piece-coil {
+      width: 22px;
+      height: 52px;
+      right: 12px;
+      bottom: 16px;
+      background: linear-gradient(180deg, rgba(255, 95, 120, 0.38), rgba(116, 242, 255, 0.12));
+      filter: hue-rotate(30deg);
+    }
+
+    .piece-mirror {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      left: 10px;
+      top: 22px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+      box-shadow: inset 0 0 9px rgba(255, 255, 255, 0.28);
+    }
+
+    .caption {
+      position: absolute;
+      bottom: 8px;
+      right: 10px;
+      font-size: 11px;
+      color: var(--soft);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 6px 8px;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      letter-spacing: 0.4px;
+    }
+
+    .stat {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 8px 10px;
+      min-height: 64px;
+    }
+
+    .stat-label {
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--soft);
+      opacity: 0.75;
+    }
+
+    .stat-value {
+      font-size: 30px;
+      margin-top: 2px;
+      color: var(--accent);
+    }
+
+    .stat .note {
+      font-size: 12px;
+      color: var(--soft);
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    .hope-core {
+      background: linear-gradient(145deg, rgba(10, 20, 32, 0.7), rgba(5, 8, 12, 0.9));
+      border: 1px solid rgba(116, 242, 255, 0.4);
+      box-shadow: inset 0 0 30px rgba(116, 242, 255, 0.12), 0 0 18px rgba(116, 242, 255, 0.18);
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 6px 0 0;
+    }
+
+    button {
+      background: linear-gradient(180deg, rgba(116, 242, 255, 0.16), rgba(116, 242, 255, 0.08));
+      color: var(--text);
+      border: 1px solid rgba(116, 242, 255, 0.5);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .danger {
+      border-color: rgba(255, 95, 120, 0.7);
+      background: linear-gradient(180deg, rgba(255, 95, 120, 0.2), rgba(255, 95, 120, 0.08));
+    }
+
+    .ghost {
+      border-color: rgba(255, 255, 255, 0.35);
+      color: var(--soft);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .upgrades {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .upgrade {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 120ms ease, border-color 120ms ease;
+    }
+
+    .upgrade:hover {
+      transform: translateY(-1px);
+      border-color: rgba(116, 242, 255, 0.35);
+    }
+
+    .upgrade h3 {
+      margin: 0;
+      font-size: 15px;
+      color: var(--accent);
+    }
+
+    .upgrade p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--soft);
+      line-height: 1.4;
+    }
+
+    .mini {
+      margin: 0 0 4px;
+      font-size: 11px;
+      color: var(--soft);
+      opacity: 0.8;
+      line-height: 1.4;
+    }
+
+    .control-note {
+      font-size: 11px;
+      color: var(--soft);
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    .log {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 6px;
+      max-height: 160px;
+      overflow-y: auto;
+      font-size: 12px;
+    }
+
+    .log li {
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .log li .tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      margin-right: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .tag-good {
+      background: rgba(116, 242, 255, 0.18);
+      color: var(--accent);
+    }
+
+    .tag-bad {
+      background: rgba(255, 95, 120, 0.25);
+      color: var(--danger);
+    }
+
+    .tag-soft {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--soft);
+    }
+
+    .story {
+      font-size: 13px;
+      color: var(--soft);
+      line-height: 1.4;
+      margin: 4px 0 0;
+    }
+
+    .status-line {
+      margin: 2px 0 0;
+      font-size: 11px;
+      color: var(--warn);
+      letter-spacing: 0.6px;
+    }
+
+    .shake {
+      animation: shake 220ms linear;
+    }
+
+    .flicker {
+      animation: flicker 240ms steps(2) infinite;
+    }
+
+    .drift {
+      animation: drift 6s ease-in-out infinite;
+    }
+
+    .glitchy {
+      text-shadow: 2px 0 var(--accent), -2px 0 var(--danger);
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-3px);
+      }
+
+      50% {
+        transform: translateX(3px);
+      }
+
+      75% {
+        transform: translateX(-2px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes flicker {
+      0% {
+        opacity: 0.6;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.65;
+      }
+    }
+
+    @keyframes drift {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+
+      50% {
+        filter: hue-rotate(12deg);
+      }
+
+      100% {
+        filter: hue-rotate(0deg);
+      }
+    }
+
+    @keyframes tremble {
+      0% {
+        transform: translateY(0);
+      }
+
+      20% {
+        transform: translateY(-3px);
+      }
+
+      40% {
+        transform: translateY(2px);
+      }
+
+      60% {
+        transform: translateY(-1px);
+      }
+
+      80% {
+        transform: translateY(3px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    body.phase-uneasy .container {
+      filter: hue-rotate(-4deg) contrast(1.05);
+    }
+
+    body.phase-betrayal .container {
+      filter: hue-rotate(12deg) saturate(1.2);
+    }
+
+    body.phase-collapse .container {
+      animation: tremble 9s ease-in-out infinite;
+    }
+
+    body.phase-descent {
+      background: radial-gradient(circle at 40% 30%, #160d0f, #05090c 60%, #020308 100%);
+    }
+
+    body.phase-descent .container {
+      filter: saturate(1.3) hue-rotate(90deg);
+    }
+
+    body.phase-gift {
+      background: linear-gradient(180deg, #fdfdfd, #f6f6ff);
+      color: #1a1a1a;
+    }
+
+    body.phase-gift .container {
+      background: rgba(255, 255, 255, 0.8);
+      border-color: rgba(0, 0, 0, 0.1);
+      box-shadow: none;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="phase-calm">
+  <div class="glow"></div>
+  <div class="container scanlines">
+    <header>
+      <div>
+        <div class="title">希望シミュレーター24</div>
+        <div class="subtitle">「宇宙ポッドは沈黙。救難電波に希望だけを乗せる。」</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="column">
+        <div class="panel">
+          <h2>ポッドステータス</h2>
+          <div class="hud">
+            <div class="stat hope-core">
+              <div class="stat-label">HOPE CORE</div>
+              <div id="hopeValue" class="stat-value">12</div>
+              <div class="note">数値は信用してはいけない。</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">DAY</div>
+              <div id="day" class="stat-value">1 / 24</div>
+              <div class="note">日が進むほど裏切りが増える。</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">RATE</div>
+              <div id="rate" class="stat-value">+0/s</div>
+              <div class="note">自動送信速度。</div>
+            </div>
+          </div>
+
+          <div class="porthole" id="porthole">
+            <div class="dash-grid"></div>
+            <div class="dash-cross"></div>
+            <div class="orbit"></div>
+            <div class="orbit orbit-2"></div>
+            <div class="beam" id="beam"></div>
+            <div class="pod-model" id="podModel">
+              <div class="pod-body"></div>
+              <div class="pod-window"></div>
+              <div class="pod-shadow"></div>
+              <div class="pod-thruster thruster-left"></div>
+              <div class="pod-thruster thruster-right"></div>
+              <div class="piece piece-antenna" id="piece-antenna"></div>
+              <div class="piece piece-amplifier" id="piece-amplifier"></div>
+              <div class="piece piece-coil" id="piece-coil"></div>
+              <div class="piece piece-mirror" id="piece-mirror"></div>
+            </div>
+            <div class="flare" id="flare"></div>
+            <div class="caption" id="portholeLabel">船体窓：希望ビーコン待機中</div>
+          </div>
+
+          <div class="controls">
+            <button id="hopeBtn">希望パルス送信</button>
+            <button id="scrambleBtn" class="danger">緊急ノイズ送信</button>
+            <button id="advanceBtn" class="ghost" disabled style="pointer-events: none;">日送りシステム（自動制御）</button>
+          </div>
+          <div class="control-note">緊急ノイズ: Hope を大きく上下させ、送信レートを少し落とす賭け。</div>
+          <div class="story" id="statusText">
+            事故で眠りから覚めた。酸素は足りない。通信士は自分だけ。希望を集め、救難信号を発信し続けろ。
+          </div>
+          <div class="status-line" id="hint">今は静かだ。日数が進むほどポッドは壊れていく。</div>
+        </div>
+
+        <div class="panel">
+          <h2>システムログ</h2>
+          <ul id="log" class="log"></ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>アップグレード</h2>
+        <p class="mini">宇宙のスクラップを集めて3Dプリンターで加工している。</p>
+        <div id="upgrades" class="upgrades"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>
