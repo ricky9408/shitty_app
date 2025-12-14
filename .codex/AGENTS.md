@@ -12,7 +12,6 @@ Shitty application is a web brower based app.
 
 - The UI of shitty app
 - The language of UI must be Japanese
-- Fun
 - Web brower based app (Should not have serverside)
 - Must be unique
 
@@ -23,6 +22,11 @@ Shitty application is a web brower based app.
 
 ## IDEAS for project
 
-- A retro style game
 - Something like a minigame of "Made in Wario" game.
 - Start with serious mood but ends with funny mood.
+
+## Files to ignore
+
+.geminiignore
+
+.gemini/**
