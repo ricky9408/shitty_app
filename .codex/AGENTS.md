@@ -10,7 +10,7 @@ Shitty application is a web brower based app.
 
 ### MUST
 
-- The UI of shitty app
+- The UI of shitty app should be 90s Windows95 OS style
 - The language of UI must be Japanese
 - Web brower based app (Should not have serverside)
 - Must be unique
@@ -18,12 +18,10 @@ Shitty application is a web brower based app.
 ### BETTER TO DO
 
 - Prefer to be a game
-- I prefer golang but choose proper language to meet MUST rules.
 
 ## IDEAS for project
 
 - Something like a minigame of "Made in Wario" game.
-- Start with serious mood but ends with funny mood.
 
 ## Files to ignore
 

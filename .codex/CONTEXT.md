@@ -2,6 +2,10 @@
 
 ## Concept of the shitty app
 
+### Click disturbur
+
+GAME CONECEPT: Make people to type the password written on the memo! but people can right click of mouse or 
+
 ### Hope simulator
 
 GAME CONCEPT: “Hope Simulator 24”
