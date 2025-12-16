@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クリック妨害官 - Click disturbur</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="desktop">
+    <div class="window">
+      <div class="title-bar">
+        <span>Win95 - Click disturbur</span>
+        <div class="title-controls">
+          <div class="title-button">−</div>
+          <div class="title-button">□</div>
+          <div class="title-button">×</div>
+        </div>
+      </div>
+      <div class="window-body">
+        <div class="badge-row">
+          <div class="badge" id="round-label">ラウンド 1 / 5</div>
+          <div class="badge">1995年 12月３１日 ☂</div>
+          <div class="badge alert">警告音に注意</div>
+        </div>
+
+        <div class="story-box" id="story-box">久しぶりにデータセンターに来たけど業務用サーバーのパスワードを忘れた。メモ用紙がモニターに貼ってある。</div>
+
+        <div class="columns">
+          <section class="panel">
+            <h2 class="panel-title">PASSWORD</h2>
+            <div class="memo-area" id="memo-area">
+              <div class="password-text" id="password-text" draggable="false"></div>
+              <div class="memo-note">※ CONFIDENTIAL</div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2 class="panel-title">入力フォーム</h2>
+            <div class="input-grid">
+              <input id="user-input" type="text" autocomplete="off" aria-label="パスワード入力欄" />
+              <button class="btn" id="submit-btn">Enter</button>
+            </div>
+            <div class="status" id="status">半角・全角を間違えないよう注意。</div>
+            <div class="meter" aria-hidden="true">
+              <div class="meter-fill" id="meter-fill"></div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel">
+          <h2 class="panel-title">ログ</h2>
+          <div class="log" id="log-box">
+            <p>Hello World!</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="warning-window hidden" id="warning-window" role="alertdialog" aria-modal="true">
+    <div class="dialog">
+      <div class="title-bar">
+        <span>警告 - コピー防止監査官</span>
+        <div class="title-controls">
+          <div class="title-button" id="warning-close">×</div>
+        </div>
+      </div>
+      <div class="dialog-body">
+        <p id="warning-message">右クリック禁止！。手で打ちなさい。</p>
+        <div class="dialog-actions">
+          <button class="btn" id="warning-ok">了解</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-window hidden" id="final-window" role="dialog" aria-modal="true">
+    <div class="dialog">
+      <div class="title-bar">
+        <span>終了 - コピー防止監査官</span>
+        <div class="title-controls">
+          <div class="title-button" id="final-close">×</div>
+        </div>
+      </div>
+      <div class="dialog-body">
+        <div class="fanfare">♪ パラッパラッパラ〜</div>
+        <p>コピー教の夢は砕かれた</p>
+        <p id="secret-report"></p>
+        <div class="dialog-actions">
+          <button class="btn" id="final-again">もう一度あそぶ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="warning-audio" preload="auto" src="sounds/warning.mp3"></audio>
+  <audio id="fanfare-audio" preload="auto" src="sounds/fanfare.wav"></audio>
+  <audio id="chime-audio" preload="auto" src="sounds/chime.wav"></audio>
+  <audio id="boot-audio" preload="auto" src="sounds/boot.wav"></audio>
+  <script src="script.js" defer></script>
+</body>
+
+</html>
