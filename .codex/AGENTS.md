@@ -24,7 +24,3 @@ Shitty application is a web brower based app.
 - Something like a minigame of "Made in Wario" game.
 
 ## Files to ignore
-
-.geminiignore
-
-.gemini/**
