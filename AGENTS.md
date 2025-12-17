@@ -10,7 +10,6 @@ Shitty application is a web brower based app.
 
 ### MUST
 
-- The UI of shitty app should be 90s Windows95 OS style
 - The language of UI must be Japanese
 - Web brower based app (Should not have serverside)
 - Must be unique
