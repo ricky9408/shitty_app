@@ -11,6 +11,7 @@ Shitty application is a web brower based app.
 ### MUST
 
 - The language of UI must be Japanese
+- The UI must be retro style
 - Web brower based app (Should not have serverside)
 - Must be unique
 
