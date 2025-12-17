@@ -1,6 +1,11 @@
 # shitty_app
 
-Shitty Applications is a playground for intentionally "useless but fun" web toys.
+このリポジトリでは様々なクソアプリたちを公開しています。
+各アプリはgithub pagesで公開しています。
+
+[https://ricky9408.github.io/shitty_app/apps/<アプリ名>](https://ricky9408.github.io/shitty_app/apps/click-disturbur)
+
+## Rules
 
 Every app must follow the rules from `.codex/AGENTS.md`.
 
