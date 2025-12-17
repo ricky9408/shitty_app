@@ -1,7 +1,7 @@
 const storyBox = document.getElementById("story-box");
 const passwordText = document.getElementById("password-text");
 const userInput = document.getElementById("user-input");
-const status = document.getElementById("status");
+const statusEl = document.getElementById("status");
 const logBox = document.getElementById("log-box");
 const roundLabel = document.getElementById("round-label");
 const meterFill = document.getElementById("meter-fill");
@@ -78,7 +78,7 @@ function startRound() {
   userInput.value = "";
   userInput.focus();
   roundLabel.textContent = `ラウンド ${currentRound + 1} / 5`;
-  status.textContent = "パスワードを入力してください。";
+  statusEl.textContent = "パスワードを入力してください。";
   meterFill.style.width = `${((currentRound) / rounds.length) * 100}%`;
   logEvent(`ラウンド${currentRound + 1}開始。文字数: ${length} / 記号混入: ${charset.replace(/[A-Za-z0-9]/g, "").length ? "あり" : "なし"}`);
 }
@@ -88,12 +88,13 @@ function showToast(text) {
   toast.className = "toast";
   toast.textContent = text;
   document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 1200);
+  setTimeout(() => toast.remove(), 3200);
 }
 
 function beep(frequency = 880, duration = 0.16) {
   try {
-    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (!window.AudioContext) return;
+    audioCtx = audioCtx || new AudioContext();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = "square";
@@ -161,7 +162,7 @@ function finishGame() {
 function handleSubmit() {
   const value = userInput.value;
   if (!value) {
-    status.textContent = "何か入力してください。";
+    statusEl.textContent = "何か入力してください。";
     return;
   }
   if (value === currentPassword) {
@@ -170,14 +171,14 @@ function handleSubmit() {
     currentRound += 1;
     meterFill.style.width = `${(currentRound / rounds.length) * 100}%`;
     if (currentRound >= rounds.length) {
-      status.textContent = "全ラウンド完了！";
+      statusEl.textContent = "全ラウンド完了！";
       finishGame();
     } else {
-      status.textContent = "正解！次のラウンドへ進みます。";
+      statusEl.textContent = "正解！次のラウンドへ進みます。";
       setTimeout(startRound, 320);
     }
   } else {
-    status.textContent = "エラー。へたくそ。";
+    statusEl.textContent = "エラー。へたくそ。";
     logEvent("エラー。コピー教の信者か？");
     beep(320, 0.08);
   }
@@ -198,7 +199,7 @@ userInput.addEventListener("keydown", (e) => {
 document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   secretCounters.rightClicks += 1;
-  showWarning("頑張って入力しよう");
+  showWarning("右クリック禁止！！");
 });
 
 memoArea.addEventListener("dragstart", (e) => {

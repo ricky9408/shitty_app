@@ -229,7 +229,7 @@ input[type="text"] {
   padding: 4px 8px;
   font-size: 12px;
   box-shadow: 2px 2px 0 var(--window-dark);
-  animation: float 1.2s ease-out forwards;
+  animation: float 3.0s ease-out forwards;
 }
 
 @keyframes float {
@@ -238,9 +238,14 @@ input[type="text"] {
     transform: translateY(0);
   }
 
+  65% {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+
   100% {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(18px);
   }
 }
 
@@ -328,6 +333,7 @@ input[type="text"] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .password-text.wobble,
   .toast,
   .fanfare {
