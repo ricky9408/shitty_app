@@ -1,5 +1,11 @@
 # CONTEXTS
 
+## Basic rules
+
+### MUST
+
+- The UI of shitty app should be 90s Windows95 OS style
+
 ## Concept of the shitty app
 
 ### Click disturbur
