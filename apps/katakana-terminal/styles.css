@@ -35,13 +35,11 @@ body::before {
 .crt-overlay {
   position: fixed;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.15),
-    rgba(0, 0, 0, 0.15) 1px,
-    transparent 1px,
-    transparent 3px
-  );
+  background: repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 3px);
   opacity: 0.7;
   mix-blend-mode: screen;
   pointer-events: none;
@@ -51,7 +49,7 @@ body::before {
 .console {
   position: relative;
   z-index: 2;
-  max-width: 960px;
+  max-width: 2060px;
   margin: 2rem auto;
   padding: 2rem;
   background: rgba(1, 20, 12, 0.92);
@@ -139,7 +137,7 @@ h1 {
 .dot-btn {
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  border: 2px solid var(--neon);
+  border: 1px solid var(--neon);
   background: rgba(0, 0, 0, 0.6);
   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
   cursor: pointer;
@@ -164,10 +162,12 @@ h1 {
   0% {
     filter: hue-rotate(0deg);
   }
+
   50% {
     filter: hue-rotate(90deg);
     transform: translate(-2px, 2px) scale(1.05);
   }
+
   100% {
     filter: hue-rotate(0deg);
     transform: none;
